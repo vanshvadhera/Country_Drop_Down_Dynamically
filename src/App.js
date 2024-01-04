@@ -6,9 +6,15 @@ import { useState } from "react";
 function App() {
   //State to store the selected option
   const [selectedOption, setSelectedOption] = useState({
-    country: "",
-    state: "",
-    city: "",
+    selectedCountry: "",
+    selectedState: "",
+    selectedCity: "",
+  });
+
+  const [displayTag] = useState({
+    dcountry: "select country",
+    dstate: "select state",
+    dcity: "select city",
   });
 
   // State to store the state and city data
@@ -22,21 +28,42 @@ function App() {
     console.log("Logging out the item", item);
     let city = City.filter((cityData) => cityData.stateId === item.id);
     setcity(city);
-    setSelectedOption({ ...selectedOption, state: item.Name });
+    setSelectedOption({
+      ...selectedOption,
+      selectedState: item.Name,
+      selectedCity: "",
+    });
   };
 
   // Function to handle the city change
   const handleCityChange = (item) => {
     console.log("Logging out the item", item);
-    setSelectedOption({ ...selectedOption, city: item.Name });
+    setSelectedOption({ ...selectedOption, selectedCity: item.Name });
   };
 
   // Function to handle the country change
   const handleCountryChange = (item) => {
-    let state = State.filter((stateData) => stateData.countryId === item.id);
-    setState(state);
-    setSelectedOption({ ...selectedOption, country: item.Name });
+    if (item.Name !== selectedOption.selectedCountry) {
+      if (item.id === 0) {
+        setState("");
+        setcity("");
+        setSelectedOption({ ...selectedOption, selectedCountry: "" });
+        return;
+      }
+
+      let state = State.filter((stateData) => stateData.countryId === item.id);
+      setState(state);
+      setcity("");
+
+      setSelectedOption({
+        selectedCountry: item.Name,
+        selectedState: "",
+        selectedCity: "",
+      });
+    }
   };
+
+  // console.log("Logging out the selected option", selectedOption);
 
   return (
     <div className={classes.appOuter}>
@@ -47,7 +74,9 @@ function App() {
             data={Country}
             handleChange={handleCountryChange}
             SelectedHeading={
-              selectedOption.country ? selectedOption.country : "Select Country"
+              selectedOption.selectedCountry
+                ? selectedOption.selectedCountry
+                : displayTag.dcountry
             }
             heading="Select Country"
           />
@@ -57,7 +86,9 @@ function App() {
               data={state}
               handleChange={handleStateChange}
               SelectedHeading={
-                selectedOption.state ? selectedOption.state : "Select State"
+                selectedOption.selectedState
+                  ? selectedOption.selectedState
+                  : displayTag.dstate
               }
               heading="Select State"
             />
@@ -67,12 +98,19 @@ function App() {
               data={city}
               handleChange={handleCityChange}
               SelectedHeading={
-                selectedOption.city ? selectedOption.city : "Select City"
+                selectedOption.selectedCity
+                  ? selectedOption.selectedCity
+                  : displayTag.dcity
               }
               heading=" Select City"
             />
           )}
-          {selectedOption.country && selectedOption.state && selectedOption.city && <h3 style={{marginTop: "20px"}} >{selectedOption.city} {selectedOption.state} {selectedOption.country}</h3>}
+          {selectedOption.selectedCity !== "" ? (
+            <h3 style={{ marginTop: "20px" }}>
+              {selectedOption.selectedCity} {selectedOption.selectedState}{" "}
+              {selectedOption.selectedCountry}
+            </h3>
+          ) : null}
         </div>
       </div>
     </div>
