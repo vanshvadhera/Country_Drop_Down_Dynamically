@@ -37,7 +37,7 @@ function App() {
 
   // Function to handle the city change
   const handleCityChange = (item) => {
-    console.log("Logging out the item", item);
+    // console.log("Logging out the item", item);
     setSelectedOption({ ...selectedOption, selectedCity: item.Name });
   };
 
