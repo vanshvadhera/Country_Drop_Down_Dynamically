@@ -130,3 +130,7 @@ export const City = [
   { id: 121, Name: "Toulouse", stateId: 49 },
   { id: 122, Name: "Nice", stateId: 50 },
 ];
+
+export const selectedCountry = [
+  { id: 1, CountryName: "", CountryState: "", CountryCity: "" },
+];
